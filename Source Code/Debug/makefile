@@ -1,6 +1,5 @@
 ################################################################################
 # Automatically-generated file. Do not edit!
-# Toolchain: GNU Tools for STM32 (10.3-2021.10)
 ################################################################################
 
 -include ../makefile.init
@@ -9,9 +8,11 @@ RM := rm -rf
 
 # All of the sources participating in the build are defined here
 -include sources.mk
+-include delay/subdir.mk
 -include Drivers/STM32F1xx_HAL_Driver/Src/subdir.mk
 -include Core/Startup/subdir.mk
 -include Core/Src/subdir.mk
+-include subdir.mk
 -include objects.mk
 
 ifneq ($(MAKECMDGOALS),clean)
@@ -28,59 +29,58 @@ endif
 
 -include ../makefile.defs
 
-OPTIONAL_TOOL_DEPS := \
-$(wildcard ../makefile.defs) \
-$(wildcard ../makefile.init) \
-$(wildcard ../makefile.targets) \
-
-
-BUILD_ARTIFACT_NAME := STEP_MOTOR_DRV8825
+BUILD_ARTIFACT_NAME := step_motor
 BUILD_ARTIFACT_EXTENSION := elf
-BUILD_ARTIFACT_PREFIX :=
-BUILD_ARTIFACT := $(BUILD_ARTIFACT_PREFIX)$(BUILD_ARTIFACT_NAME)$(if $(BUILD_ARTIFACT_EXTENSION),.$(BUILD_ARTIFACT_EXTENSION),)
+BUILD_ARTIFACT_PREFIX := 
+BUILD_ARTIFACT := $(BUILD_ARTIFACT_PREFIX)$(BUILD_ARTIFACT_NAME).$(BUILD_ARTIFACT_EXTENSION)
 
 # Add inputs and outputs from these tool invocations to the build variables 
 EXECUTABLES += \
-STEP_MOTOR_DRV8825.elf \
-
-MAP_FILES += \
-STEP_MOTOR_DRV8825.map \
+step_motor.elf \
 
 SIZE_OUTPUT += \
 default.size.stdout \
 
 OBJDUMP_LIST += \
-STEP_MOTOR_DRV8825.list \
+step_motor.list \
+
+OBJCOPY_BIN += \
+step_motor.bin \
 
 
 # All Target
 all: main-build
 
 # Main-build Target
-main-build: STEP_MOTOR_DRV8825.elf secondary-outputs
+main-build: step_motor.elf secondary-outputs
 
 # Tool invocations
-STEP_MOTOR_DRV8825.elf STEP_MOTOR_DRV8825.map: $(OBJS) $(USER_OBJS) C:\Users\P.Mansournia\Desktop\DRV8825\ Stepper\ Motor\ Driver\Source\ Code\STM32F103C8TX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "STEP_MOTOR_DRV8825.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m3 -T"C:\Users\P.Mansournia\Desktop\DRV8825 Stepper Motor Driver\Source Code\STM32F103C8TX_FLASH.ld" --specs=nosys.specs -Wl,-Map="STEP_MOTOR_DRV8825.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+step_motor.elf: $(OBJS) $(USER_OBJS) C:\Users\m.sehati\STM32CubeIDE\workspace_1.5.1\step_motor\STM32F103C8TX_FLASH.ld
+	arm-none-eabi-gcc -o "step_motor.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m3 -T"C:\Users\m.sehati\STM32CubeIDE\workspace_1.5.1\step_motor\STM32F103C8TX_FLASH.ld" --specs=nosys.specs -Wl,-Map="step_motor.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 
-default.size.stdout: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
+default.size.stdout: $(EXECUTABLES)
 	arm-none-eabi-size  $(EXECUTABLES)
 	@echo 'Finished building: $@'
 	@echo ' '
 
-STEP_MOTOR_DRV8825.list: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-objdump -h -S $(EXECUTABLES) > "STEP_MOTOR_DRV8825.list"
+step_motor.list: $(EXECUTABLES)
+	arm-none-eabi-objdump -h -S $(EXECUTABLES) > "step_motor.list"
+	@echo 'Finished building: $@'
+	@echo ' '
+
+step_motor.bin: $(EXECUTABLES)
+	arm-none-eabi-objcopy  -O binary $(EXECUTABLES) "step_motor.bin"
 	@echo 'Finished building: $@'
 	@echo ' '
 
 # Other Targets
 clean:
-	-$(RM) STEP_MOTOR_DRV8825.elf STEP_MOTOR_DRV8825.list STEP_MOTOR_DRV8825.map default.size.stdout
+	-$(RM) *
 	-@echo ' '
 
-secondary-outputs: $(SIZE_OUTPUT) $(OBJDUMP_LIST)
+secondary-outputs: $(SIZE_OUTPUT) $(OBJDUMP_LIST) $(OBJCOPY_BIN)
 
 fail-specified-linker-script-missing:
 	@echo 'Error: Cannot find the specified linker script. Check the linker settings in the build configuration.'
@@ -89,6 +89,7 @@ fail-specified-linker-script-missing:
 warn-no-linker-script-specified:
 	@echo 'Warning: No linker script specified. Check the linker settings in the build configuration.'
 
-.PHONY: all clean dependents main-build fail-specified-linker-script-missing warn-no-linker-script-specified
+.PHONY: all clean dependents fail-specified-linker-script-missing warn-no-linker-script-specified
+.SECONDARY:
 
 -include ../makefile.targets
